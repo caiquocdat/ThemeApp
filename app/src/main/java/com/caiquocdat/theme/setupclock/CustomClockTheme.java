@@ -10,13 +10,14 @@ import android.graphics.Paint;
 import android.graphics.Rect;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
+import android.util.Log;
 import android.util.TypedValue;
 
 import androidx.core.app.ActivityCompat;
 
 import java.util.Calendar;
 
-public class CustomClock {
+public class CustomClockTheme {
     private Bitmap backgroundBitmap;
     private int height, width = 0;
     private int padding = 0;
@@ -30,10 +31,11 @@ public class CustomClock {
     private Paint centerPaint, handPaint, rimPaint, numberPaint;
     private Context context;
 
-    public CustomClock(Context context) {
+    public CustomClockTheme(Context context,Bitmap bitmap) {
         this.context = context;
-        backgroundBitmap = getWallpaperBitmap(context);
+        backgroundBitmap = bitmap;
     }
+
 
     public Bitmap getWallpaperBitmap(Context context) {
         WallpaperManager wallpaperManager = WallpaperManager.getInstance(context);
@@ -92,9 +94,10 @@ public class CustomClock {
         if (!isInit) {
             initClock(canvas.getWidth(), canvas.getHeight());
         }
-//        if (backgroundBitmap != null) {
-//            canvas.drawBitmap(backgroundBitmap, 0, 0, null);
-//        }
+        Log.d("Test_5", "draw: "+backgroundBitmap);
+        if (backgroundBitmap != null) {
+            canvas.drawBitmap(backgroundBitmap, 0, 0, null);
+        }
 
 
         canvas.drawCircle(width / 2, height / 2, radius + padding - 10, rimPaint);

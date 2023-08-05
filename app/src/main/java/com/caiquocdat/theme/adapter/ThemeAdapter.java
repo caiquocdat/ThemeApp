@@ -15,6 +15,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
 import com.caiquocdat.theme.DetailThemeActivity;
 import com.caiquocdat.theme.databinding.ItemThemeGridBinding;
 import com.caiquocdat.theme.model.ThemeModel;
@@ -44,7 +45,9 @@ public class ThemeAdapter extends RecyclerView.Adapter<ThemeAdapter.ThemeViewHol
     public void onBindViewHolder(@NonNull ThemeViewHolder holder, int position) {
         ThemeModel theme = themeList.get(position);
         holder.itemAnswerBinding.itemTv.setText(theme.getTitle());
-        holder.itemAnswerBinding.themeImg.setImageDrawable(theme.getDrawable());
+        Glide.with(holder.itemAnswerBinding.themeImg.getContext())
+                .load(theme.getImagePath()) // Lấy đường dẫn hình ảnh từ đối tượng theme
+                .into(holder.itemAnswerBinding.themeImg);
         holder.itemAnswerBinding.themeImg.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

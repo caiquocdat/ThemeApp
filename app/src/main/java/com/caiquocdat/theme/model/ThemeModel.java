@@ -1,21 +1,19 @@
 package com.caiquocdat.theme.model;
 
-import android.graphics.Bitmap;
-import android.graphics.drawable.Drawable;
+import java.util.ArrayList;
 
 public class ThemeModel {
     private int id;
     private String title;
-    private Drawable drawable;
-    private Drawable detailDrawable;
+    private String imagePath; // Chứa đường dẫn đến hình ảnh
+    private ArrayList<String> listDetailImagePaths; // Chứa danh sách các đường dẫn đến hình ảnh chi tiết
 
-    public ThemeModel(int id, String title, Drawable drawable, Drawable detailDrawable) {
+    public ThemeModel(int id, String title, String imagePath, ArrayList<String> listDetailImagePaths) {
         this.id = id;
         this.title = title;
-        this.drawable = drawable;
-        this.detailDrawable = detailDrawable;
+        this.imagePath = imagePath;
+        this.listDetailImagePaths = listDetailImagePaths;
     }
-
 
     public int getId() {
         return id;
@@ -33,19 +31,19 @@ public class ThemeModel {
         this.title = title;
     }
 
-    public Drawable getDrawable() {
-        return drawable;
+    public String getImagePath() {
+        return imagePath;
     }
 
-    public void setDrawable(Drawable drawable) {
-        this.drawable = drawable;
+    public void setImagePath(String imagePath) {
+        this.imagePath = imagePath;
     }
 
-    public Drawable getDetailDrawable() {
-        return detailDrawable;
+    public ArrayList<String> getListDetailImagePaths() {
+        return listDetailImagePaths;
     }
 
-    public void setDetailDrawable(Drawable detailDrawable) {
-        this.detailDrawable = detailDrawable;
+    public void setListDetailImagePaths(ArrayList<String> listDetailImagePaths) {
+        this.listDetailImagePaths = listDetailImagePaths;
     }
 }

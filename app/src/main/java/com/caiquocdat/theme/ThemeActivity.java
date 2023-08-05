@@ -48,6 +48,16 @@ public class ThemeActivity extends AppCompatActivity {
                 return false;
             }
         });
+        themeBinding.seeAllImg.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+//                Intent intent= new Intent(HomeActivity.this,BuildClockActivity.class);
+//                startActivity(intent);
+                Intent intent= new Intent(ThemeActivity.this, DetailThemeActivity.class);
+                intent.putExtra("potition",8);
+                startActivity(intent);
+            }
+        });
 
         themeBinding.contentEdt.addTextChangedListener(new TextWatcher() {
             @Override

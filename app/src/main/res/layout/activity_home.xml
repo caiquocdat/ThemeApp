@@ -54,6 +54,7 @@
         </RelativeLayout>
         </androidx.cardview.widget.CardView>
         <ImageView
+            android:id="@+id/moreImg"
             android:layout_width="4dp"
             android:layout_height="22dp"
             android:src="@drawable/img_more"/>
@@ -88,11 +89,106 @@
     </RelativeLayout>
 
     <ImageView
-        android:id="@+id/getStartedImg"
+        android:id="@+id/seeAllImg"
         android:layout_width="300dp"
         android:layout_height="100dp"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
         android:src="@drawable/img_see_all"/>
+    <LinearLayout
+        android:visibility="gone"
+        android:layout_marginTop="20dp"
+        android:id="@+id/showMoreLinear"
+        android:orientation="vertical"
+        android:paddingLeft="40dp"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/topLiear"
+        android:background="#66000000"
+        >
+        <TextView
+            android:id="@+id/favouriteTv"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Favorite"
+            android:textSize="15sp"
+            android:textColor="@color/white"
+            android:fontFamily="@font/point_regualar"
+            android:layout_marginTop="20dp"/>
+        <TextView
+            android:id="@+id/tradiTv"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Traditional Wallpaper"
+            android:textSize="15sp"
+            android:textColor="@color/white"
+            android:fontFamily="@font/point_regualar"
+            android:layout_marginTop="10dp"/>
+        <TextView
+            android:id="@+id/clocklTv"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Built-In Clock"
+            android:textSize="15sp"
+            android:textColor="@color/white"
+            android:fontFamily="@font/point_regualar"
+            android:layout_marginTop="10dp"/>
+        <TextView
+            android:id="@+id/luxTv"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Luxury"
+            android:textSize="15sp"
+            android:textColor="#AEAEAE"
+            android:fontFamily="@font/point_regualar"
+            android:layout_marginTop="10dp"/>
+        <TextView
+            android:id="@+id/classTv"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Classic"
+            android:textSize="15sp"
+            android:textColor="#AEAEAE"
+            android:fontFamily="@font/point_regualar"
+            android:layout_marginTop="10dp"/>
+        <TextView
+            android:id="@+id/ficTv"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Fiction"
+            android:textSize="15sp"
+            android:textColor="#AEAEAE"
+            android:fontFamily="@font/point_regualar"
+            android:layout_marginTop="10dp"/>
+        <TextView
+            android:id="@+id/houlTv"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Hourglass"
+            android:textSize="15sp"
+            android:textColor="#AEAEAE"
+            android:fontFamily="@font/point_regualar"
+            android:layout_marginTop="10dp"/>
+        <TextView
+            android:id="@+id/modTv"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Modern"
+            android:textSize="15sp"
+            android:textColor="#AEAEAE"
+            android:fontFamily="@font/point_regualar"
+            android:layout_marginTop="10dp"/>
+        <TextView
+            android:id="@+id/recTv"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Recall"
+            android:textSize="15sp"
+            android:textColor="#AEAEAE"
+            android:fontFamily="@font/point_regualar"
+            android:layout_marginTop="10dp"/>
+
+
+    </LinearLayout>
 
 </RelativeLayout>
