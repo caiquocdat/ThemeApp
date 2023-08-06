@@ -5,14 +5,59 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".DetailThemeActivity">
-    <ImageView
-        android:id="@+id/themeImg"
-        android:scaleType="center"
+    <androidx.viewpager.widget.ViewPager
+        android:id="@+id/viewpager"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:src="@drawable/img_logo_onboarding"/>
+       />
+    <com.caiquocdat.theme.setupclock.ClockView
+        android:id="@+id/clockView"
+        android:visibility="gone"
+        android:layout_marginTop="50dp"
+        android:layout_width="400dp"
+        android:layout_height="400dp"
+        android:layout_centerHorizontal="true"/>
+
+    <RelativeLayout
+        android:layout_marginTop="50dp"
+        android:layout_marginLeft="40dp"
+        android:id="@+id/backRel"
+        android:background="@drawable/brg_back"
+        android:layout_width="40dp"
+        android:layout_height="40dp">
+        <ImageView
+            android:layout_centerInParent="true"
+            android:layout_width="10dp"
+            android:layout_height="20dp"
+            android:src="@drawable/img_back"/>
+    </RelativeLayout>
+    <RelativeLayout
+        android:layout_marginLeft="40dp"
+        android:layout_marginRight="40dp"
+        android:layout_above="@id/bottomLinear"
+        android:layout_marginBottom="150dp"
+        android:layout_centerHorizontal="true"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        >
+        <ImageView
+
+            android:id="@+id/beforeImg"
+            android:layout_width="42dp"
+            android:layout_height="42dp"
+            android:src="@drawable/img_before"/>
+
+        <ImageView
+            android:layout_alignParentRight="true"
+            android:id="@+id/nextImg"
+            android:layout_marginLeft="20dp"
+            android:layout_width="42dp"
+            android:layout_height="42dp"
+            android:src="@drawable/img_next"/>
+    </RelativeLayout>
     <LinearLayout
-        android:layout_marginBottom="50dp"
+        android:id="@+id/bottomLinear"
+        android:layout_marginBottom="80dp"
         android:gravity="center"
         android:layout_centerHorizontal="true"
         android:layout_alignParentBottom="true"
@@ -37,5 +82,4 @@
             android:layout_height="38dp"
             android:src="@drawable/img_heart"/>
     </LinearLayout>
-
 </RelativeLayout>

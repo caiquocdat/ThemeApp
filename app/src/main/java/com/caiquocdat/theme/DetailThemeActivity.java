@@ -39,10 +39,13 @@ import com.caiquocdat.theme.data.DataGenerator;
 import com.caiquocdat.theme.databinding.ActivityDetailThemeBinding;
 import com.caiquocdat.theme.databinding.ActivityHomeBinding;
 import com.caiquocdat.theme.databinding.ActivityThemeBinding;
+import com.caiquocdat.theme.model.FavouritesModel;
 import com.caiquocdat.theme.model.ThemeModel;
 import com.caiquocdat.theme.setupclock.ClockView;
 import com.caiquocdat.theme.setupclock.ClockWallpaperService;
 import com.caiquocdat.theme.setupclock.CustomClockTheme;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -50,6 +53,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.lang.reflect.Type;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
@@ -62,6 +66,12 @@ public class DetailThemeActivity extends AppCompatActivity {
     int potition_detail;
     private int potition_check = 0;
     Bitmap bitmap_theme;
+    private static final String PREFERENCES_NAME = "favourites_preferences";
+    private static final String KEY_FAVOURITES_LIST = "favourites_list";
+    private SharedPreferences sharedPreferences;
+    private Gson gson;
+    List<FavouritesModel> listDrawableNew;
+    String check;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -70,29 +80,46 @@ public class DetailThemeActivity extends AppCompatActivity {
         View view = activityDetailThemeBinding.getRoot();
         setContentView(view);
         hideSystemUI();
+        sharedPreferences = getSharedPreferences(PREFERENCES_NAME, Context.MODE_PRIVATE);
+        gson = new Gson();
         Intent intent = getIntent();
         potition_detail = intent.getIntExtra("potition", 0);
-        List<String> listDrawable = getDrawableTheme();
-        String drawable = listDrawable.get(potition_check);
-        new GetImageFromUrlTask().execute(drawable);
+        if (getFavouritesList() == null) {
+            saveFavouritesList(getDrawableTheme());
+        }
+        List<FavouritesModel> listDrawable = getFavouritesList();
+        if (listDrawable != null) {
+            checkFavourite();
+            check = listDrawable.get(potition_check).getCheck();
+            if (check.equals("true")) {
+                Drawable drawable = ContextCompat.getDrawable(getApplicationContext(), R.drawable.img_heart_check);
+                activityDetailThemeBinding.heartImg.setImageDrawable(drawable);
+            } else {
+                Drawable drawable = ContextCompat.getDrawable(getApplicationContext(), R.drawable.img_heart);
+                activityDetailThemeBinding.heartImg.setImageDrawable(drawable);
+            }
+            String drawable = listDrawable.get(potition_check).getPath();
+            new GetImageFromUrlTask().execute(drawable);
 //        saveDrawableToPreferences(DetailThemeActivity.this,"value");
 
-        CustomPagerAdapter customPagerAdapter = new CustomPagerAdapter(this, getDrawableTheme());
-        activityDetailThemeBinding.viewpager.setAdapter(customPagerAdapter);
+            CustomPagerAdapter customPagerAdapter = new CustomPagerAdapter(this, getDrawableTheme());
+            activityDetailThemeBinding.viewpager.setAdapter(customPagerAdapter);
+        }
+
 
         activityDetailThemeBinding.shareImg.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                List<String> listDrawable = getDrawableTheme();
-                String drawable = listDrawable.get(potition_check);
+                List<FavouritesModel> listDrawable = getDrawableTheme();
+                String drawable = listDrawable.get(potition_check).getPath();
                 shareImage(drawable, DetailThemeActivity.this, "Theme");
             }
         });
         activityDetailThemeBinding.downloadImg.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                List<String> listDrawable = getDrawableTheme();
-                String drawable = listDrawable.get(potition_check);
+                List<FavouritesModel> listDrawable = getDrawableTheme();
+                String drawable = listDrawable.get(potition_check).getPath();
                 Log.d("Test_12", "onClick: " + drawable);
                 downloadAndSetWallpaper(drawable, getApplicationContext());
                 if (potition_detail == 7) {
@@ -104,19 +131,67 @@ public class DetailThemeActivity extends AppCompatActivity {
 
             }
         });
+        activityDetailThemeBinding.heartImg.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                List<FavouritesModel> listDrawable_check = getFavouritesList();
+                String check = listDrawable_check.get(potition_check).getCheck();
+                if (check.equals("false")) {
+                    listDrawableNew = getFavouritesList();
+                    Drawable drawable = ContextCompat.getDrawable(getApplicationContext(), R.drawable.img_heart_check);
+                    activityDetailThemeBinding.heartImg.setImageDrawable(drawable);
+                    for (int i = 0; i < listDrawableNew.size(); i++) {
+                        if (i == potition_check) {
+                            FavouritesModel item = listDrawableNew.get(i);
+                            item.setCheck("true");
+                            listDrawable.set(i, item); // Cập nhật lại danh sách tại vị trí đã thay đổi
+                            break;
+                        }
+                    }
+                    saveFavouritesList(listDrawableNew);
+                } else {
+                    listDrawableNew = getFavouritesList();
+                    Drawable drawable = ContextCompat.getDrawable(getApplicationContext(), R.drawable.img_heart);
+                    activityDetailThemeBinding.heartImg.setImageDrawable(drawable);
+                    for (int i = 0; i < listDrawableNew.size(); i++) {
+                        if (i == potition_check) {
+                            FavouritesModel item = listDrawableNew.get(i);
+                            item.setCheck("false");
+                            listDrawable.set(i, item); // Cập nhật lại danh sách tại vị trí đã thay đổi
+                            break;
+                        }
+                    }
+                    saveFavouritesList(listDrawableNew);
+                }
+                if (potition_detail==9) {
+                    CustomPagerAdapter customPagerAdapter = new CustomPagerAdapter(DetailThemeActivity.this, getDrawableTheme());
+                    customPagerAdapter.notifyDataSetChanged();
+                    activityDetailThemeBinding.viewpager.setAdapter(customPagerAdapter);
+                }
+
+//                if (check.equals("true")){
+//                    Drawable drawable = ContextCompat.getDrawable(getApplicationContext(), R.drawable.img_heart_check);
+//                    activityDetailThemeBinding.heartImg.setImageDrawable(drawable);
+//                }else{
+//                    Drawable drawable = ContextCompat.getDrawable(getApplicationContext(), R.drawable.img_heart);
+//                    activityDetailThemeBinding.heartImg.setImageDrawable(drawable);
+//                }
+            }
+        });
         activityDetailThemeBinding.backRel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (potition_detail == 7) {
-                    Intent intent = new Intent(DetailThemeActivity.this, HomeActivity.class);
-                    startActivity(intent);
-                } if (potition_detail == 8) {
-                    Intent intent = new Intent(DetailThemeActivity.this, HomeActivity.class);
-                    startActivity(intent);
-                }else {
-                    Intent intent = new Intent(DetailThemeActivity.this, ThemeActivity.class);
-                    startActivity(intent);
-                }
+//                if (potition_detail == 7) {
+//                    Intent intent = new Intent(DetailThemeActivity.this, HomeActivity.class);
+//                    startActivity(intent);
+//                } if (potition_detail == 8) {
+//                    Intent intent = new Intent(DetailThemeActivity.this, HomeActivity.class);
+//                    startActivity(intent);
+//                }else {
+//                    Intent intent = new Intent(DetailThemeActivity.this, ThemeActivity.class);
+//                    startActivity(intent);
+//                }
+                finish();
             }
         });
         activityDetailThemeBinding.nextImg.setOnClickListener(new View.OnClickListener() {
@@ -148,12 +223,22 @@ public class DetailThemeActivity extends AppCompatActivity {
                 // This method will be invoked when a new page becomes selected
                 // You can handle your logic here
                 potition_check = position;
+                List<FavouritesModel> listDrawable = getFavouritesList();
+                String check = listDrawable.get(position).getCheck();
+
+                if (check.equals("true")) {
+                    Drawable drawable = ContextCompat.getDrawable(getApplicationContext(), R.drawable.img_heart_check);
+                    activityDetailThemeBinding.heartImg.setImageDrawable(drawable);
+                } else {
+                    Drawable drawable = ContextCompat.getDrawable(getApplicationContext(), R.drawable.img_heart);
+                    activityDetailThemeBinding.heartImg.setImageDrawable(drawable);
+                }
 
                 activityDetailThemeBinding.shareImg.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        List<String> listDrawable = getDrawableTheme();
-                        String drawable = listDrawable.get(position);
+                        List<FavouritesModel> listDrawable = getDrawableTheme();
+                        String drawable = listDrawable.get(position).getPath();
                         shareImage(drawable, DetailThemeActivity.this, "Theme");
 
                     }
@@ -161,8 +246,8 @@ public class DetailThemeActivity extends AppCompatActivity {
                 activityDetailThemeBinding.downloadImg.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        List<String> listDrawable = getDrawableTheme();
-                        String drawable = listDrawable.get(position);
+                        List<FavouritesModel> listDrawable = getDrawableTheme();
+                        String drawable = listDrawable.get(position).getPath();
                         downloadAndSetWallpaper(drawable, v.getContext());
                         Toast.makeText(DetailThemeActivity.this, "Ảnh đã được đặt làm hình nền", Toast.LENGTH_SHORT).show();
                         if (potition_detail == 7) {
@@ -184,9 +269,15 @@ public class DetailThemeActivity extends AppCompatActivity {
         });
     }
 
+    private void checkFavourite() {
+        if (getCheckedFavouritesList() == null || getCheckedFavouritesList().size() == 0) {
+            Toast.makeText(this, "Bạn chưa thêm ảnh yêu thích!", Toast.LENGTH_SHORT).show();
+        }
+    }
+
     public void saveDrawableToPreferences(Context context, String key) {
-        List<String> listDrawable = getDrawableTheme();
-        String drawable = listDrawable.get(potition_check);
+        List<FavouritesModel> listDrawable = getDrawableTheme();
+        String drawable = listDrawable.get(potition_check).getPath();
 //        Bitmap bitmap = drawableToBitmap(drawable);
         String encodedBitmap = encodeToBase64(bitmap_theme);
 
@@ -358,25 +449,30 @@ public class DetailThemeActivity extends AppCompatActivity {
     }
 
 
-    ArrayList<String> getDrawableTheme() {
+    ArrayList<FavouritesModel> getDrawableTheme() {
         if (potition_detail == 7) {
             activityDetailThemeBinding.clockView.setVisibility(View.VISIBLE);
             DataGenerator.initializeClockData(this);
             ArrayList<ThemeModel> themeModels = DataGenerator.getThemeClockModels();
-            ArrayList<String> listDrawable = themeModels.get(0).getListDetailImagePaths();
+            ArrayList<FavouritesModel> listDrawable = themeModels.get(0).getListDetailImagePaths();
             return listDrawable;
         } else if (potition_detail == 8) {
             DataGenerator.initializeData(this);
-            ArrayList<String> allImages = new ArrayList<>();
+            ArrayList<FavouritesModel> allImages = new ArrayList<>();
             ArrayList<ThemeModel> themeModels = DataGenerator.getThemeModels();
             for (ThemeModel themeModel : themeModels) {
                 allImages.addAll(themeModel.getListDetailImagePaths());
             }
             return allImages;
+        }
+        if (potition_detail == 9) {
+            ArrayList<FavouritesModel> allImages = new ArrayList<>();
+            allImages = getCheckedFavouritesList();
+            return allImages;
         } else {
             DataGenerator.initializeData(this);
             ArrayList<ThemeModel> themeModels = DataGenerator.getThemeModels();
-            ArrayList<String> listDrawable = themeModels.get(potition_detail).getListDetailImagePaths();
+            ArrayList<FavouritesModel> listDrawable = themeModels.get(potition_detail).getListDetailImagePaths();
             return listDrawable;
         }
     }
@@ -486,5 +582,35 @@ public class DetailThemeActivity extends AppCompatActivity {
             editor.apply();
 
         }
+    }
+
+
+    public void saveFavouritesList(List<FavouritesModel> list) {
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        String json = gson.toJson(list);
+        editor.putString(KEY_FAVOURITES_LIST, json);
+        editor.apply();
+    }
+
+    public ArrayList<FavouritesModel> getFavouritesList() {
+        String json = sharedPreferences.getString(KEY_FAVOURITES_LIST, null);
+        Type type = new TypeToken<ArrayList<FavouritesModel>>() {
+        }.getType();
+        return gson.fromJson(json, type);
+    }
+
+    public ArrayList<FavouritesModel> getCheckedFavouritesList() {
+        ArrayList<FavouritesModel> allFavourites = getFavouritesList();
+        if (allFavourites != null) {
+            ArrayList<FavouritesModel> checkedFavourites = new ArrayList<>();
+
+            for (FavouritesModel favouritesModel : allFavourites) {
+                if ("true".equals(favouritesModel.getCheck())) {
+                    checkedFavourites.add(favouritesModel);
+                }
+            }
+            return checkedFavourites;
+        }
+        return null;
     }
 }

@@ -18,7 +18,6 @@ import android.view.inputmethod.InputMethodManager;
 
 import com.caiquocdat.theme.adapter.ThemeAdapter;
 import com.caiquocdat.theme.data.DataGenerator;
-import com.caiquocdat.theme.databinding.ActivityHomeBinding;
 import com.caiquocdat.theme.databinding.ActivityThemeBinding;
 import com.caiquocdat.theme.model.ThemeModel;
 
@@ -29,6 +28,7 @@ public class ThemeActivity extends AppCompatActivity {
     private ActivityThemeBinding themeBinding;
     private ThemeAdapter themeAdapter;
     private ThemeModel themeModel;
+    private String check = "false";
 
 
     @Override
@@ -51,11 +51,113 @@ public class ThemeActivity extends AppCompatActivity {
         themeBinding.seeAllImg.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//                Intent intent= new Intent(HomeActivity.this,BuildClockActivity.class);
+//                Intent intent= new Intent(ThemeActivity.this,BuildClockActivity.class);
 //                startActivity(intent);
                 Intent intent= new Intent(ThemeActivity.this, DetailThemeActivity.class);
                 intent.putExtra("potition",8);
                 startActivity(intent);
+            }
+        });
+        themeBinding.showMoreLinear.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                themeBinding.showMoreLinear.setVisibility(View.GONE);
+                themeBinding.themeRcv.setEnabled(true);
+            }
+        });
+        themeBinding.luxTv.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(ThemeActivity.this, DetailThemeActivity.class);
+                intent.putExtra("potition", 0);
+                startActivity(intent);
+                themeBinding.showMoreLinear.setVisibility(View.GONE);
+            }
+        });
+        themeBinding.classTv.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(ThemeActivity.this, DetailThemeActivity.class);
+                intent.putExtra("potition", 1);
+                startActivity(intent);
+                themeBinding.showMoreLinear.setVisibility(View.GONE);
+            }
+        });
+        themeBinding.ficTv.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(ThemeActivity.this, DetailThemeActivity.class);
+                intent.putExtra("potition", 2);
+                startActivity(intent);
+                themeBinding.showMoreLinear.setVisibility(View.GONE);
+            }
+        });
+        themeBinding.houlTv.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(ThemeActivity.this, DetailThemeActivity.class);
+                intent.putExtra("potition", 3);
+                startActivity(intent);
+                themeBinding.showMoreLinear.setVisibility(View.GONE);
+            }
+        });
+        themeBinding.modTv.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(ThemeActivity.this, DetailThemeActivity.class);
+                intent.putExtra("potition", 4);
+                startActivity(intent);
+                themeBinding.showMoreLinear.setVisibility(View.GONE);
+            }
+        });
+        themeBinding.luxTv.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(ThemeActivity.this, DetailThemeActivity.class);
+                intent.putExtra("potition", 5);
+                startActivity(intent);
+                themeBinding.showMoreLinear.setVisibility(View.GONE);
+            }
+        });
+        themeBinding.favouriteTv.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(ThemeActivity.this, DetailThemeActivity.class);
+                intent.putExtra("potition", 9);
+                startActivity(intent);
+                themeBinding.showMoreLinear.setVisibility(View.GONE);
+            }
+        });
+        themeBinding.tradiTv.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(ThemeActivity.this, ThemeActivity.class);
+                startActivity(intent);
+                themeBinding.showMoreLinear.setVisibility(View.GONE);
+            }
+        });
+        themeBinding.clocklTv.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(ThemeActivity.this, DetailThemeActivity.class);
+                intent.putExtra("potition", 7);
+                startActivity(intent);
+                themeBinding.showMoreLinear.setVisibility(View.GONE);
+            }
+        });
+        themeBinding.moreImg.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                if (check.equals("false")) {
+                    themeBinding.showMoreLinear.setVisibility(View.VISIBLE);
+                    themeBinding.themeRcv.setEnabled(false);
+                    check="true";
+                }else{
+                    themeBinding.showMoreLinear.setVisibility(View.GONE);
+                    themeBinding.themeRcv.setEnabled(true);
+                    check="false";
+                }
+                return false;
             }
         });
 

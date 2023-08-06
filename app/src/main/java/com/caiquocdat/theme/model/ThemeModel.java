@@ -6,9 +6,9 @@ public class ThemeModel {
     private int id;
     private String title;
     private String imagePath; // Chứa đường dẫn đến hình ảnh
-    private ArrayList<String> listDetailImagePaths; // Chứa danh sách các đường dẫn đến hình ảnh chi tiết
+    private ArrayList<FavouritesModel> listDetailImagePaths; // Chứa danh sách các đường dẫn đến hình ảnh chi tiết
 
-    public ThemeModel(int id, String title, String imagePath, ArrayList<String> listDetailImagePaths) {
+    public ThemeModel(int id, String title, String imagePath, ArrayList<FavouritesModel> listDetailImagePaths) {
         this.id = id;
         this.title = title;
         this.imagePath = imagePath;
@@ -39,11 +39,11 @@ public class ThemeModel {
         this.imagePath = imagePath;
     }
 
-    public ArrayList<String> getListDetailImagePaths() {
+    public ArrayList<FavouritesModel> getListDetailImagePaths() {
         return listDetailImagePaths;
     }
 
-    public void setListDetailImagePaths(ArrayList<String> listDetailImagePaths) {
+    public void setListDetailImagePaths(ArrayList<FavouritesModel> listDetailImagePaths) {
         this.listDetailImagePaths = listDetailImagePaths;
     }
 }

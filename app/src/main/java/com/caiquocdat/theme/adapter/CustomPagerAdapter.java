@@ -9,14 +9,15 @@ import android.widget.ImageView;
 import androidx.viewpager.widget.PagerAdapter;
 
 import com.bumptech.glide.Glide;
+import com.caiquocdat.theme.model.FavouritesModel;
 
 import java.util.ArrayList;
 
 public class CustomPagerAdapter extends PagerAdapter {
     private Context mContext;
-    private ArrayList<String> mListDrawable;
+    private ArrayList<FavouritesModel> mListDrawable;
 
-    public CustomPagerAdapter(Context context, ArrayList<String> listDrawable) {
+    public CustomPagerAdapter(Context context, ArrayList<FavouritesModel> listDrawable) {
         mContext = context;
         mListDrawable = listDrawable;
     }
@@ -25,7 +26,7 @@ public class CustomPagerAdapter extends PagerAdapter {
     public Object instantiateItem(ViewGroup collection, int position) {
         ImageView imageView = new ImageView(mContext);
         Glide.with(mContext)
-                .load(mListDrawable.get(position)) // Lấy đường dẫn hình ảnh từ đối tượng theme
+                .load(mListDrawable.get(position).getPath()) // Lấy đường dẫn hình ảnh từ đối tượng theme
                 .into(imageView);
 //        imageView.setImageDrawable(mListDrawable.get(position));
         collection.addView(imageView, 0);
