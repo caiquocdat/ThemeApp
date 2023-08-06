@@ -123,6 +123,7 @@ public class DetailThemeActivity extends AppCompatActivity {
                 Log.d("Test_12", "onClick: " + drawable);
                 downloadAndSetWallpaper(drawable, getApplicationContext());
                 if (potition_detail == 7) {
+                    new GetImageFromUrlTask().execute(drawable);
                     Intent intent = new Intent(WallpaperManager.ACTION_CHANGE_LIVE_WALLPAPER);
                     intent.putExtra(WallpaperManager.EXTRA_LIVE_WALLPAPER_COMPONENT, new ComponentName(DetailThemeActivity.this, ClockWallpaperService.class));
                     startActivityForResult(intent, YOUR_REQUEST_CODE);
